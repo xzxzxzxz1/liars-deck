@@ -8,15 +8,9 @@ class Player:
     
     def eliminate(self):
         self.alive = False
-        print(self.name + " has been eliminated!")
+        print(str(self.name) + " has been eliminated!")
         
     def display_name(self):
         shots_taken = abs(self.max_lives - 6)
         return f"{self.name} [{shots_taken}/6]"
     
-        
-        
-        
-        
-
-        
