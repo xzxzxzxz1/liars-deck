@@ -137,16 +137,22 @@ class Round:
     def play_round(self):
         while self.ongoing == True:
             for player in self.players:
+                if len(player.hand) == 0:
+                    continue
+        
                 t = Turn(player)
-                action = t.get_action()
-                if action == 'B':
-                    self.call_bluff(player, self.previous_player)
-                    break
-                else: 
+                action = t.get_action(self.previous_hand)
+                if action != 'B' and not self.last_player():
                     amount = len(action)
                     print(f"{player.name}: {amount} {self.symbol_to_word(self.playcard, amount)}!")
                     self.previous_hand = action
                     self.previous_player = player
+                else: 
+                    self.call_bluff(player, self.previous_player)
+                    break
+                    
+    def last_player(self):
+        return sum(1 for player in self.players if len(player.hand) > 0) <= 1
         
     def initialise_playcard(self):
         draw = ["A", "K", "Q"]
@@ -156,10 +162,10 @@ class Round:
         print("______________")
         
         return round_card
-        
-    def start_turn_timer(self):
-        # 30 second timer 
-        self.end_turn()
+       
+    ## def start_turn_timer(self, player):
+        time.sleep(30)
+        self.call_bluff(player, self.previous_player)
         pass
 
     def initialise_hands(self):
@@ -174,7 +180,6 @@ class Round:
         print("There are 6 Aces, 6 Kings, 6 Queens and 2 Jokers in the deck.")
     
     def roulette(self, player):
-        import time
         bullet_chamber = random.randint(1, player.max_lives)
         shot = random.randint(1, player.max_lives)
         print("Waiting...")
@@ -228,11 +233,14 @@ class Turn:
         
         print("Your hand is currently:" + str(self.player.hand))
     
-    def get_action(self):
+    def get_action(self, previous_hand):
         while True:
             user_input = input("Enter your action: ").upper()
             
             if user_input == 'B':
+                if previous_hand == None:
+                    print("Cannot call bluff on first turn!")
+                    continue
                 return user_input
                 # Call Bluff
             elif user_input == 'I':
@@ -243,7 +251,7 @@ class Turn:
             
             else: 
                 try: 
-                    inputs = [int(i) for i in user_input.split(",")]
+                    inputs = [int(i.strip()) for i in user_input.split(",")]
                 except ValueError:
                     print("ERROR: Please enter valid integers separated by commas.")
                     continue
