@@ -231,7 +231,14 @@ class Turn:
             ## print("your first and second cards which both Kings or something like '3' to play your 3rd card (Queen)")
             ## print("Enter I to toggle the instruction display.")
         
-        print("Your hand is currently:" + str(self.player.hand))
+        self.print_hand()
+        
+    def print_hand(self):
+        print("Your hand is:")
+        counter = 1
+        for card in self.player.hand:
+            print(f"{counter}. {card}")
+            counter += 1
     
     def get_action(self, previous_hand):
         while True:
