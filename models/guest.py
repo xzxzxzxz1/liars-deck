@@ -10,3 +10,11 @@ class Guest:
         # they can press to toggle their ready status
         self.is_ready = not self.is_ready
         return self.is_ready
+    
+    def to_dict(self):
+        return {
+            "name":self.name,
+            "is_ready": self.is_ready,
+            "wins": self.wins,
+            "losses": self.losses
+        }

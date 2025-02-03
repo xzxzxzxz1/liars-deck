@@ -27,4 +27,9 @@ class Game:
         self.num_players = len(self.players)
         if self.num_players == 1:
             self.ongoing = False
-        return True
+            
+        return {
+            "ongoing": self.ongoing,
+            "num_players": self.num_players,
+            "players_alive": [player.name for player in self.players]
+        }
